@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Presupuestos — Gyver Motos</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="/" class="brand">Gyver Motos</a>
+    <a href="/companias">Compañías</a>
+    <a href="/usuarios">Usuarios</a>
+    <div class="spacer"></div>
+    <span class="user-info" id="nav-user"></span>
+    <form action="/auth/logout" method="POST" style="margin:0">
+      <button type="submit" class="btn btn-sm btn-secondary">Salir</button>
+    </form>
+  </nav>
+
+  <div class="container">
+    <div class="page-header">
+      <h1 class="page-title">Presupuestos</h1>
+      <a href="/nuevo" class="btn btn-primary">+ Nuevo presupuesto</a>
+    </div>
+
+    <!-- Filtros -->
+    <div class="flex gap-2 mb-4" style="flex-wrap:wrap;gap:10px;">
+      <input type="text" id="q" placeholder="Buscar por asegurado o patente..." style="max-width:280px">
+      <select id="filtro-estado" style="width:auto">
+        <option value="">Todos los estados</option>
+        <option value="borrador">Borrador</option>
+        <option value="enviado">Enviado</option>
+        <option value="aprobado">Aprobado</option>
+        <option value="rechazado">Rechazado</option>
+      </select>
+      <select id="filtro-compania" style="width:auto">
+        <option value="">Todas las compañías</option>
+      </select>
+    </div>
+
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>N° Presupuesto</th>
+            <th>Asegurado</th>
+            <th>Patente</th>
+            <th>Compañía</th>
+            <th class="tr">Total</th>
+            <th>Estado</th>
+            <th>Creado por</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="tabla-body">
+          <tr><td colspan="8" style="text-align:center;padding:32px;color:var(--muted)">Cargando...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Modal cambio de estado -->
+  <div class="modal-overlay hidden" id="modal-estado">
+    <div class="modal">
+      <h3>Cambiar estado</h3>
+      <p>Seleccioná el nuevo estado para <strong id="modal-numero"></strong></p>
+      <select id="select-estado" style="width:100%;margin-bottom:16px">
+        <option value="borrador">Borrador</option>
+        <option value="enviado">Enviado</option>
+        <option value="aprobado">Aprobado</option>
+        <option value="rechazado">Rechazado</option>
+      </select>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" onclick="cerrarModalEstado()">Cancelar</button>
+        <button class="btn btn-primary" id="btn-guardar-estado">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal eliminar -->
+  <div class="modal-overlay hidden" id="modal-eliminar">
+    <div class="modal">
+      <h3>Eliminar presupuesto</h3>
+      <p>¿Confirmas que querés eliminar <strong id="modal-eliminar-numero"></strong>? Esta acción no se puede deshacer.</p>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" onclick="cerrarModalEliminar()">Cancelar</button>
+        <button class="btn btn-danger" id="btn-confirmar-eliminar">Eliminar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/list.js"></script>
+</body>
+</html>
