@@ -1,0 +1,21 @@
+[phases.setup]
+nixPkgs = [
+  "chromium",
+  "nss",
+  "nspr",
+  "atk",
+  "at-spi2-atk",
+  "cups",
+  "libXcomposite",
+  "libXdamage",
+  "libXext",
+  "libXfixes",
+  "libXrandr",
+  "mesa",
+  "libdrm",
+  "expat",
+  "alsa-lib"
+]
+
+[phases.install]
+cmds = ["npm ci"]
