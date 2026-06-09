@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Compañías — Gyver Motos</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="/" class="brand">Gyver Motos</a>
+    <a href="/">← Presupuestos</a>
+    <a href="/usuarios">Usuarios</a>
+    <div class="spacer"></div>
+    <form action="/auth/logout" method="POST" style="margin:0">
+      <button type="submit" class="btn btn-sm btn-secondary">Salir</button>
+    </form>
+  </nav>
+  <div class="container">
+    <div class="page-header">
+      <h1 class="page-title">Compañías de seguros</h1>
+    </div>
+
+    <!-- Formulario agregar -->
+    <form id="form-compania" class="flex gap-2 mb-4" style="gap:10px">
+      <input type="text" id="nueva-compania" placeholder="Nombre de la compañía" style="max-width:320px" required>
+      <button type="submit" class="btn btn-primary">Agregar</button>
+    </form>
+    <div id="msg-compania" class="hidden mb-4"></div>
+
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr><th>Nombre</th><th>Estado</th><th>Acciones</th></tr>
+        </thead>
+        <tbody id="tbody-companias"></tbody>
+      </table>
+    </div>
+  </div>
+  <script>
+    async function cargar() {
+      const res = await fetch('/api/companias?todas=1');
+      const lista = await res.json();
+      document.getElementById('tbody-companias').innerHTML = lista.map(c => `
+        <tr>
+          <td><strong>${c.nombre}</strong></td>
+          <td><span class="badge ${c.activa ? 'badge-aprobado' : 'badge-rechazado'}">${c.activa ? 'Activa' : 'Inactiva'}</span></td>
+          <td>
+            <button class="btn btn-sm btn-secondary" onclick="toggle(${c.id})">
+              ${c.activa ? 'Desactivar' : 'Activar'}
+            </button>
+          </td>
+        </tr>
+      `).join('') || '<tr><td colspan="3" style="text-align:center;padding:24px;color:var(--muted)">Sin compañías</td></tr>';
+    }
+    async function toggle(id) {
+      await fetch(`/api/companias/${id}/toggle`, { method: 'PATCH' });
+      cargar();
+    }
+    document.getElementById('form-compania').addEventListener('submit', async e => {
+      e.preventDefault();
+      const nombre = document.getElementById('nueva-compania').value.trim();
+      const res = await fetch('/api/companias', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ nombre })
+      });
+      const msg = document.getElementById('msg-compania');
+      if (res.ok) {
+        document.getElementById('nueva-compania').value = '';
+        msg.className = 'hidden';
+        cargar();
+      } else {
+        const d = await res.json();
+        msg.textContent = d.error;
+        msg.className = 'alert alert-warning';
+      }
+    });
+    cargar();
+  </script>
+</body>
+</html>
