@@ -8,7 +8,8 @@ const BCRYPT_ROUNDS = parseInt(process.env.BCRYPT_ROUNDS || '10');
 function requireAuth(req, res, next) {
   const token = req.cookies && req.cookies.token;
   if (!token) {
-    const isApi = req.path.startsWith('/api/') || req.path.startsWith('/pdf/');
+    const fullPath = req.originalUrl || req.path;
+    const isApi = fullPath.startsWith('/api/') || fullPath.startsWith('/pdf/');
     return isApi
       ? res.status(401).json({ error: 'No autorizado' })
       : res.redirect('/login');
@@ -18,7 +19,8 @@ function requireAuth(req, res, next) {
     next();
   } catch {
     res.clearCookie('token');
-    const isApi = req.path.startsWith('/api/') || req.path.startsWith('/pdf/');
+    const fullPath = req.originalUrl || req.path;
+    const isApi = fullPath.startsWith('/api/') || fullPath.startsWith('/pdf/');
     return isApi
       ? res.status(401).json({ error: 'Sesión expirada' })
       : res.redirect('/login');
