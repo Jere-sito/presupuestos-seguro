@@ -9,6 +9,8 @@ const { JWT_SECRET, BCRYPT_ROUNDS } = require('../middleware/auth');
 
 const router = express.Router();
 const COOKIE_MAX_AGE = 30 * 24 * 60 * 60 * 1000; // 30 días
+// Dummy hash para evitar timing oracle en enumeración de emails
+const DUMMY_HASH = '$2b$10$kCIQ.WG1KhlVFiQRHFIGge1N8j5KeGEkKkJVOB.WV9h4YpJmwJzZe';
 
 router.get('/login', (req, res) => {
   res.sendFile(path.join(__dirname, '../views/login.html'));
@@ -21,7 +23,10 @@ router.post('/auth/login', async (req, res) => {
   }
   const db = getDb();
   const user = db.prepare('SELECT * FROM usuarios WHERE email = ?').get(email);
-  if (!user || !(await bcrypt.compare(password, user.password_hash))) {
+  // Siempre ejecutar bcrypt.compare para evitar timing oracle
+  const hashToCompare = user ? user.password_hash : DUMMY_HASH;
+  const valid = await bcrypt.compare(password, hashToCompare);
+  if (!user || !valid) {
     return res.status(401).json({ error: 'Credenciales incorrectas' });
   }
   const token = jwt.sign(
