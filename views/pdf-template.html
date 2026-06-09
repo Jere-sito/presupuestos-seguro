@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, Helvetica, sans-serif; font-size: 11px; color: #222; padding: 0; }
+
+    .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+    .logo img { max-height: 80px; max-width: 180px; }
+    .taller-info { text-align: right; font-size: 10px; line-height: 1.6; }
+    .taller-info strong { font-size: 13px; display: block; margin-bottom: 2px; }
+
+    .doc-titulo {
+      text-align: center; font-size: 11px; font-weight: bold;
+      border: 2px solid #222; padding: 5px; margin-bottom: 12px; letter-spacing: .03em;
+    }
+
+    .pres-meta { display: flex; justify-content: space-between; margin-bottom: 14px; font-size: 11px; }
+
+    .siniestro {
+      border: 1px solid #ccc; padding: 10px; margin-bottom: 16px;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 5px 20px;
+    }
+    .siniestro .field { display: flex; gap: 4px; }
+    .siniestro .label { font-weight: bold; white-space: nowrap; flex-shrink: 0; }
+
+    .seccion-titulo { font-size: 11px; font-weight: bold; margin-bottom: 4px; text-transform: uppercase; }
+
+    table { width: 100%; border-collapse: collapse; margin-bottom: 14px; page-break-inside: avoid; }
+    thead th { background: #333; color: #fff; padding: 6px 8px; text-align: left; font-size: 10px; }
+    tbody td { padding: 5px 8px; border-bottom: 1px solid #eee; font-size: 10.5px; }
+    tfoot td { padding: 5px 8px; font-weight: bold; background: #f5f5f5; }
+    .tr { text-align: right; }
+
+    .totales-wrap { display: flex; justify-content: flex-end; margin-top: 8px; }
+    .totales { width: 280px; border: 1px solid #ccc; border-collapse: collapse; }
+    .totales td { padding: 5px 10px; border-bottom: 1px solid #eee; font-size: 10.5px; }
+    .totales .total-row { background: #222; color: #fff; }
+    .totales .total-row td { font-size: 14px; font-weight: bold; padding: 8px 10px; }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="logo">
+      <% if (logoBase64) { %><img src="<%= logoBase64 %>" alt="Gyver Motos"><% } %>
+    </div>
+    <div class="taller-info">
+      <strong>GYVER MOTOS</strong>
+      Montibelli Javier Hernan<br>
+      Av. Mosconi 1296, (1752) Lomas del Mirador, Pcia de Bs. As.<br>
+      CUIT: 23-22023139-9 &nbsp;|&nbsp; IIBB: 23-22023139-9<br>
+      Inicio actividades: 13/03/2008<br>
+      Condición IVA: Responsable Inscripto
+    </div>
+  </div>
+
+  <div class="doc-titulo">DOCUMENTO NO VÁLIDO COMO FACTURA &mdash; PRESUPUESTO</div>
+
+  <div class="pres-meta">
+    <span><strong>N°:</strong> <%= p.numero %></span>
+    <span><strong>Fecha:</strong> <%= formatDate(p.fecha_emision) %></span>
+  </div>
+
+  <div class="siniestro">
+    <div class="field"><span class="label">Sres.:</span><span><%= p.asegurado || '' %></span></div>
+    <div class="field"><span class="label">Domicilio:</span><span><%= p.domicilio_asegurado || '' %></span></div>
+    <div class="field"><span class="label">Marca:</span><span><%= p.marca || '' %></span></div>
+    <div class="field"><span class="label">Patente:</span><span><%= p.patente || '' %></span></div>
+    <div class="field"><span class="label">Modelo:</span><span><%= p.modelo || '' %></span></div>
+    <div class="field"><span class="label">Tipo:</span><span><%= p.tipo_moto || '' %></span></div>
+    <div class="field"><span class="label">Fecha siniestro:</span><span><%= p.fecha_siniestro ? formatDate(p.fecha_siniestro) : '' %></span></div>
+    <div class="field"><span class="label">Compañía:</span><span><%= p.compania_nombre || '' %></span></div>
+    <div class="field"><span class="label">N° siniestro:</span><span><%= p.numero_siniestro || '' %></span></div>
+  </div>
+
+  <% if (repuestos.length) { %>
+  <p class="seccion-titulo">Repuestos</p>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:55px">Cantidad</th>
+        <th>Descripción</th>
+        <th style="width:110px" class="tr">Precio Unit.</th>
+        <th style="width:110px" class="tr">Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% repuestos.forEach(item => { %>
+      <tr>
+        <td><%= item.cantidad %></td>
+        <td><%= item.descripcion %></td>
+        <td class="tr"><%= fmt(item.precio_unitario) %></td>
+        <td class="tr"><%= fmt(item.cantidad * item.precio_unitario) %></td>
+      </tr>
+      <% }) %>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="3" class="tr">SUBTOTAL REPUESTOS:</td>
+        <td class="tr"><%= fmt(subtotalRep) %></td>
+      </tr>
+    </tfoot>
+  </table>
+  <% } %>
+
+  <% if (manoObra.length) { %>
+  <p class="seccion-titulo">Mano de Obra</p>
+  <table>
+    <thead>
+      <tr>
+        <th>Descripción</th>
+        <th style="width:130px" class="tr">Precio</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% manoObra.forEach(item => { %>
+      <tr>
+        <td><%= item.descripcion %></td>
+        <td class="tr"><%= fmt(item.precio_unitario) %></td>
+      </tr>
+      <% }) %>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td class="tr">SUBTOTAL MANO DE OBRA:</td>
+        <td class="tr"><%= fmt(subtotalMO) %></td>
+      </tr>
+    </tfoot>
+  </table>
+  <% } %>
+
+  <div class="totales-wrap">
+    <table class="totales">
+      <tbody>
+        <% if (repuestos.length) { %>
+        <tr><td>Subtotal Repuestos</td><td class="tr"><%= fmt(subtotalRep) %></td></tr>
+        <% } %>
+        <% if (manoObra.length) { %>
+        <tr><td>Subtotal Mano de Obra</td><td class="tr"><%= fmt(subtotalMO) %></td></tr>
+        <% } %>
+        <tr><td>Neto Gravado</td><td class="tr"><%= fmt(neto) %></td></tr>
+        <tr><td>IVA 21%</td><td class="tr"><%= fmt(iva) %></td></tr>
+        <tr class="total-row"><td>TOTAL</td><td class="tr"><%= fmt(total) %></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</body>
+</html>
