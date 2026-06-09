@@ -1,0 +1,26 @@
+{
+  "name": "sistema-presupuestos-gyver",
+  "version": "1.0.0",
+  "description": "Sistema de presupuestos para compañías de seguros — Gyver Motos",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node --test tests/*.test.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "better-sqlite3": "^12.10.0",
+    "cookie-parser": "^1.4.7",
+    "ejs": "^6.0.1",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "puppeteer": "^25.1.0"
+  },
+  "devDependencies": {
+    "supertest": "^7.2.2"
+  }
+}
