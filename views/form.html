@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Presupuesto — Gyver Motos</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="/" class="brand">Gyver Motos</a>
+    <a href="/">← Volver al listado</a>
+    <div class="spacer"></div>
+    <span class="save-indicator" id="save-status">Sin cambios</span>
+  </nav>
+
+  <!-- Banner de advertencia para estados no-borrador -->
+  <div class="alert alert-warning hidden" id="banner-estado">
+    <strong id="banner-texto"></strong>
+    <button class="btn btn-sm btn-secondary" id="btn-habilitar-edicion" style="margin-left:12px">
+      Editar de todos modos
+    </button>
+  </div>
+
+  <div class="container">
+    <form id="form-presupuesto" autocomplete="off">
+
+      <!-- Encabezado -->
+      <div class="form-grid" style="margin-bottom:16px">
+        <div class="field-group">
+          <label for="numero">N° Presupuesto</label>
+          <input type="text" id="numero" name="numero" placeholder="PRES-0001">
+        </div>
+        <div class="field-group">
+          <label for="fecha_emision">Fecha de emisión</label>
+          <input type="date" id="fecha_emision" name="fecha_emision">
+        </div>
+      </div>
+
+      <!-- Datos del siniestro -->
+      <h2 style="font-size:14px;font-weight:700;margin-bottom:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Datos del siniestro y vehículo</h2>
+      <div class="form-grid">
+        <div class="field-group span-2">
+          <label for="asegurado">Asegurado (Sres.)</label>
+          <input type="text" id="asegurado" name="asegurado">
+        </div>
+        <div class="field-group span-2">
+          <label for="domicilio_asegurado">Domicilio del asegurado</label>
+          <input type="text" id="domicilio_asegurado" name="domicilio_asegurado">
+        </div>
+        <div class="field-group">
+          <label for="marca">Marca</label>
+          <input type="text" id="marca" name="marca">
+        </div>
+        <div class="field-group">
+          <label for="patente">Patente</label>
+          <input type="text" id="patente" name="patente" style="text-transform:uppercase">
+        </div>
+        <div class="field-group">
+          <label for="modelo">Modelo</label>
+          <input type="text" id="modelo" name="modelo">
+        </div>
+        <div class="field-group">
+          <label for="tipo_moto">Tipo</label>
+          <input type="text" id="tipo_moto" name="tipo_moto" placeholder="Scooter, Naked, Enduro…">
+        </div>
+        <div class="field-group">
+          <label for="fecha_siniestro">Fecha del siniestro</label>
+          <input type="date" id="fecha_siniestro" name="fecha_siniestro">
+        </div>
+        <div class="field-group">
+          <label for="compania_id">Compañía de seguros</label>
+          <select id="compania_id" name="compania_id">
+            <option value="">Seleccionar…</option>
+          </select>
+        </div>
+        <div class="field-group span-2">
+          <label for="numero_siniestro">N° de siniestro / expediente</label>
+          <input type="text" id="numero_siniestro" name="numero_siniestro">
+        </div>
+      </div>
+
+      <!-- Repuestos -->
+      <div class="section-header">
+        <h3>Repuestos</h3>
+        <button type="button" class="btn btn-sm btn-secondary" id="btn-add-repuesto">+ Agregar repuesto</button>
+      </div>
+      <div class="table-wrap" style="margin-bottom:8px">
+        <table class="items-table">
+          <thead>
+            <tr>
+              <th style="width:70px">Cant.</th>
+              <th>Descripción</th>
+              <th style="width:130px">Precio unit.</th>
+              <th style="width:120px" class="tr">Total</th>
+              <th style="width:36px"></th>
+            </tr>
+          </thead>
+          <tbody id="tbody-repuestos">
+            <tr id="rep-empty"><td colspan="5" style="text-align:center;padding:16px;color:var(--muted);font-size:13px">Sin repuestos</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="text-right" style="font-size:13px;font-weight:600;margin-bottom:20px">
+        Subtotal repuestos: <span id="subtotal-rep">$0,00</span>
+      </div>
+
+      <!-- Mano de obra -->
+      <div class="section-header">
+        <h3>Mano de obra</h3>
+        <button type="button" class="btn btn-sm btn-secondary" id="btn-add-mo">+ Agregar mano de obra</button>
+      </div>
+      <div class="table-wrap" style="margin-bottom:8px">
+        <table class="items-table">
+          <thead>
+            <tr>
+              <th>Descripción</th>
+              <th style="width:130px">Precio</th>
+              <th style="width:36px"></th>
+            </tr>
+          </thead>
+          <tbody id="tbody-mo">
+            <tr id="mo-empty"><td colspan="3" style="text-align:center;padding:16px;color:var(--muted);font-size:13px">Sin mano de obra</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="text-right" style="font-size:13px;font-weight:600;margin-bottom:20px">
+        Subtotal mano de obra: <span id="subtotal-mo">$0,00</span>
+      </div>
+
+      <!-- Totales -->
+      <div class="totales-panel" style="max-width:320px;margin-left:auto">
+        <table>
+          <tbody>
+            <tr><td>Subtotal repuestos</td><td class="tr" id="tot-rep">$0,00</td></tr>
+            <tr><td>Subtotal mano de obra</td><td class="tr" id="tot-mo">$0,00</td></tr>
+            <tr><td>Neto gravado</td><td class="tr" id="tot-neto">$0,00</td></tr>
+            <tr><td>IVA 21%</td><td class="tr" id="tot-iva">$0,00</td></tr>
+            <tr class="total-final"><td>TOTAL</td><td class="tr" id="tot-total">$0,00</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="flex" style="gap:10px;margin-top:24px;justify-content:flex-end">
+        <a href="/" class="btn btn-secondary">Volver al listado</a>
+        <button type="button" class="btn btn-secondary hidden" id="btn-pdf">📄 Descargar PDF</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Modal advertencia de edición -->
+  <div class="modal-overlay hidden" id="modal-advertencia">
+    <div class="modal">
+      <h3>⚠️ Presupuesto con estado <span id="modal-estado-nombre"></span></h3>
+      <p>Editarlo puede afectar la integridad documental. ¿Confirmás que querés modificarlo?</p>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" id="btn-cancelar-edicion">Cancelar</button>
+        <button class="btn btn-danger" id="btn-confirmar-edicion">Sí, editar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/form.js"></script>
+</body>
+</html>
