@@ -1,0 +1,692 @@
+{
+  "usuarios": [
+    {
+      "id": 2,
+      "nombre": "Jere",
+      "email": "jere@gyver.local",
+      "password_hash": "$2b$10$/s/..wXWZ9WEjHPL3mo/COUppe4ZFqMIcJcaWDdCZEjHiJBCN0m.O",
+      "creado_en": "2026-06-10 17:23:57"
+    },
+    {
+      "id": 3,
+      "nombre": "Bruno",
+      "email": "bruno@gyver.local",
+      "password_hash": "$2b$10$SnKrid0SnwWzCEI7Zms8M.E67UhXPwxpOVaxduEkf298DtSxNxJyq",
+      "creado_en": "2026-06-10 17:24:04"
+    }
+  ],
+  "companias": [
+    {
+      "id": 1,
+      "nombre": "ATM",
+      "activa": 1
+    },
+    {
+      "id": 2,
+      "nombre": "-",
+      "activa": 1
+    }
+  ],
+  "presupuestos": [
+    {
+      "id": 7,
+      "numero": "PRES-0001",
+      "numero_secuencial": 1,
+      "fecha_emision": "2026-06-10",
+      "asegurado": "Matías Novillo",
+      "domicilio_asegurado": "AV.Nazca 3377- C.A.B.A",
+      "marca": "Yamaha",
+      "patente": "236-UMF",
+      "modelo": "YBR-Z",
+      "tipo_moto": "Motocicleta",
+      "fecha_siniestro": null,
+      "compania_id": 2,
+      "numero_siniestro": null,
+      "estado": "enviado",
+      "creado_por": 3,
+      "creado_en": "2026-06-10 18:22:45",
+      "modificado_en": "2026-06-11 13:58:33",
+      "codigo_serie": "WX2V-9QDC-52VC-E9CQ"
+    },
+    {
+      "id": 8,
+      "numero": "PRES-0002",
+      "numero_secuencial": 2,
+      "fecha_emision": "2026-06-11",
+      "asegurado": "Tobías Aisenberg",
+      "domicilio_asegurado": "Maipú 945 - Ramos Mejía",
+      "marca": "Keller",
+      "patente": "A28-2MNG",
+      "modelo": "CRONOS TUNING",
+      "tipo_moto": "Motocicleta",
+      "fecha_siniestro": null,
+      "compania_id": 2,
+      "numero_siniestro": null,
+      "estado": "borrador",
+      "creado_por": 3,
+      "creado_en": "2026-06-11 14:29:20",
+      "modificado_en": "2026-06-11 18:09:13",
+      "codigo_serie": "GZMF-23ZA-8GVQ-LXHL"
+    },
+    {
+      "id": 9,
+      "numero": "PRES-0003",
+      "numero_secuencial": 3,
+      "fecha_emision": "2026-06-20",
+      "asegurado": "Alexis Adrián Galván",
+      "domicilio_asegurado": "Quirno Costa 545 Lomas del Mirador",
+      "marca": "YAMAHA",
+      "patente": "A14-7FIM",
+      "modelo": "FZ FI",
+      "tipo_moto": "Motocicleta",
+      "fecha_siniestro": null,
+      "compania_id": 2,
+      "numero_siniestro": null,
+      "estado": "borrador",
+      "creado_por": 3,
+      "creado_en": "2026-06-20 17:48:19",
+      "modificado_en": "2026-06-20 18:27:30",
+      "codigo_serie": "HT7C-WZX7-DBSR-AJHV"
+    },
+    {
+      "id": 10,
+      "numero": "PRES-0004",
+      "numero_secuencial": 4,
+      "fecha_emision": "2026-06-20",
+      "asegurado": "David Ezequiel Amaya",
+      "domicilio_asegurado": "Lomas del mirador - Colon 3069",
+      "marca": "Gilera",
+      "patente": "A298ilh",
+      "modelo": "Smash",
+      "tipo_moto": "Motocicleta",
+      "fecha_siniestro": null,
+      "compania_id": 2,
+      "numero_siniestro": null,
+      "estado": "borrador",
+      "creado_por": 3,
+      "creado_en": "2026-06-20 18:30:17",
+      "modificado_en": "2026-06-22 15:44:31",
+      "codigo_serie": "FB9P-L68L-PQTD-WGU9"
+    },
+    {
+      "id": 11,
+      "numero": "PRES-0005",
+      "numero_secuencial": 5,
+      "fecha_emision": "2026-06-24",
+      "asegurado": "Alan Daniel Ullua",
+      "domicilio_asegurado": "Danubio 4675 - Isidro Casanova",
+      "marca": "SUZUKI",
+      "patente": "A031XQQ",
+      "modelo": "GIXXER",
+      "tipo_moto": "Motocicleta",
+      "fecha_siniestro": null,
+      "compania_id": 2,
+      "numero_siniestro": null,
+      "estado": "borrador",
+      "creado_por": 3,
+      "creado_en": "2026-06-24 19:29:19",
+      "modificado_en": "2026-06-25 14:25:49",
+      "codigo_serie": "TAHF-65W2-9BYE-US4S"
+    }
+  ],
+  "items": [
+    {
+      "id": 606,
+      "presupuesto_id": 7,
+      "tipo": "repuesto",
+      "descripcion": "Arco Posapie ",
+      "cantidad": 1,
+      "precio_unitario": 83000,
+      "orden": 0
+    },
+    {
+      "id": 607,
+      "presupuesto_id": 7,
+      "tipo": "repuesto",
+      "descripcion": "Escape ",
+      "cantidad": 1,
+      "precio_unitario": 345000,
+      "orden": 1
+    },
+    {
+      "id": 608,
+      "presupuesto_id": 7,
+      "tipo": "repuesto",
+      "descripcion": "Manija freno",
+      "cantidad": 1,
+      "precio_unitario": 10000,
+      "orden": 2
+    },
+    {
+      "id": 609,
+      "presupuesto_id": 7,
+      "tipo": "repuesto",
+      "descripcion": "Jgo. Puños ",
+      "cantidad": 1,
+      "precio_unitario": 15000,
+      "orden": 3
+    },
+    {
+      "id": 610,
+      "presupuesto_id": 7,
+      "tipo": "repuesto",
+      "descripcion": "Soporte pedalines tarseros",
+      "cantidad": 1,
+      "precio_unitario": 81000,
+      "orden": 4
+    },
+    {
+      "id": 611,
+      "presupuesto_id": 7,
+      "tipo": "repuesto",
+      "descripcion": "Optica delantera",
+      "cantidad": 1,
+      "precio_unitario": 248000,
+      "orden": 5
+    },
+    {
+      "id": 612,
+      "presupuesto_id": 7,
+      "tipo": "repuesto",
+      "descripcion": "Caballete ",
+      "cantidad": 1,
+      "precio_unitario": 180000,
+      "orden": 6
+    },
+    {
+      "id": 613,
+      "presupuesto_id": 7,
+      "tipo": "repuesto",
+      "descripcion": "Guardabarro delanetero",
+      "cantidad": 1,
+      "precio_unitario": 178000,
+      "orden": 7
+    },
+    {
+      "id": 614,
+      "presupuesto_id": 7,
+      "tipo": "repuesto",
+      "descripcion": "Manubrio ",
+      "cantidad": 1,
+      "precio_unitario": 90000,
+      "orden": 8
+    },
+    {
+      "id": 615,
+      "presupuesto_id": 7,
+      "tipo": "mano_obra",
+      "descripcion": "Enderezado chasis trasero ",
+      "cantidad": null,
+      "precio_unitario": 400000,
+      "orden": 0
+    },
+    {
+      "id": 616,
+      "presupuesto_id": 7,
+      "tipo": "mano_obra",
+      "descripcion": "Recambio partes ",
+      "cantidad": null,
+      "precio_unitario": 350000,
+      "orden": 1
+    },
+    {
+      "id": 871,
+      "presupuesto_id": 8,
+      "tipo": "repuesto",
+      "descripcion": "Cubre optica",
+      "cantidad": 1,
+      "precio_unitario": 60000,
+      "orden": 0
+    },
+    {
+      "id": 872,
+      "presupuesto_id": 8,
+      "tipo": "repuesto",
+      "descripcion": "Espejo izquierdo",
+      "cantidad": 1,
+      "precio_unitario": 10000,
+      "orden": 1
+    },
+    {
+      "id": 873,
+      "presupuesto_id": 8,
+      "tipo": "repuesto",
+      "descripcion": "Arco posapie ",
+      "cantidad": 1,
+      "precio_unitario": 25000,
+      "orden": 2
+    },
+    {
+      "id": 874,
+      "presupuesto_id": 8,
+      "tipo": "repuesto",
+      "descripcion": "Palanca cambios ",
+      "cantidad": 1,
+      "precio_unitario": 15000,
+      "orden": 3
+    },
+    {
+      "id": 875,
+      "presupuesto_id": 8,
+      "tipo": "repuesto",
+      "descripcion": "Pechera ",
+      "cantidad": 1,
+      "precio_unitario": 60000,
+      "orden": 4
+    },
+    {
+      "id": 876,
+      "presupuesto_id": 8,
+      "tipo": "repuesto",
+      "descripcion": " Bajo pechera izquierdo ",
+      "cantidad": 1,
+      "precio_unitario": 30000,
+      "orden": 5
+    },
+    {
+      "id": 877,
+      "presupuesto_id": 8,
+      "tipo": "mano_obra",
+      "descripcion": "Recambio partes ",
+      "cantidad": null,
+      "precio_unitario": 300000,
+      "orden": 0
+    },
+    {
+      "id": 1384,
+      "presupuesto_id": 9,
+      "tipo": "repuesto",
+      "descripcion": "CACHA BAJO ASINETO LADO DERECHO ",
+      "cantidad": 1,
+      "precio_unitario": 110000,
+      "orden": 0
+    },
+    {
+      "id": 1385,
+      "presupuesto_id": 9,
+      "tipo": "repuesto",
+      "descripcion": "AGARA MANO LATERAL DERECHO",
+      "cantidad": 1,
+      "precio_unitario": 50000,
+      "orden": 1
+    },
+    {
+      "id": 1386,
+      "presupuesto_id": 9,
+      "tipo": "repuesto",
+      "descripcion": "MANUBRIO",
+      "cantidad": 1,
+      "precio_unitario": 85000,
+      "orden": 2
+    },
+    {
+      "id": 1387,
+      "presupuesto_id": 9,
+      "tipo": "repuesto",
+      "descripcion": "ESPEJOS",
+      "cantidad": 1,
+      "precio_unitario": 100000,
+      "orden": 3
+    },
+    {
+      "id": 1388,
+      "presupuesto_id": 9,
+      "tipo": "repuesto",
+      "descripcion": "PUNTERAS ",
+      "cantidad": 1,
+      "precio_unitario": 20000,
+      "orden": 4
+    },
+    {
+      "id": 1389,
+      "presupuesto_id": 9,
+      "tipo": "repuesto",
+      "descripcion": "BOMBA FRENO",
+      "cantidad": 1,
+      "precio_unitario": 200000,
+      "orden": 5
+    },
+    {
+      "id": 1390,
+      "presupuesto_id": 9,
+      "tipo": "repuesto",
+      "descripcion": "CUBRE OPTICA ",
+      "cantidad": 1,
+      "precio_unitario": 84000,
+      "orden": 6
+    },
+    {
+      "id": 1391,
+      "presupuesto_id": 9,
+      "tipo": "repuesto",
+      "descripcion": "GIRO DERECHO DELANTERO ",
+      "cantidad": 1,
+      "precio_unitario": 42000,
+      "orden": 7
+    },
+    {
+      "id": 1392,
+      "presupuesto_id": 9,
+      "tipo": "repuesto",
+      "descripcion": "TANQUE COMBUSTIBLE",
+      "cantidad": 1,
+      "precio_unitario": 250000,
+      "orden": 8
+    },
+    {
+      "id": 1393,
+      "presupuesto_id": 9,
+      "tipo": "repuesto",
+      "descripcion": "CACHA BAJO LATERAL TANQUE DERECHA ",
+      "cantidad": 1,
+      "precio_unitario": 82000,
+      "orden": 9
+    },
+    {
+      "id": 1394,
+      "presupuesto_id": 9,
+      "tipo": "repuesto",
+      "descripcion": "PUÑO LADO DERECHO ",
+      "cantidad": 1,
+      "precio_unitario": 25000,
+      "orden": 10
+    },
+    {
+      "id": 1395,
+      "presupuesto_id": 9,
+      "tipo": "repuesto",
+      "descripcion": "RUEDA DELANTERA ",
+      "cantidad": 1,
+      "precio_unitario": 500000,
+      "orden": 11
+    },
+    {
+      "id": 1396,
+      "presupuesto_id": 9,
+      "tipo": "repuesto",
+      "descripcion": "COBERTOR TANQUE LADO DERECHO",
+      "cantidad": 1,
+      "precio_unitario": 110000,
+      "orden": 12
+    },
+    {
+      "id": 1397,
+      "presupuesto_id": 9,
+      "tipo": "mano_obra",
+      "descripcion": "MANO DE OBRA ENDEREZADO BARRALES ",
+      "cantidad": null,
+      "precio_unitario": 350000,
+      "orden": 0
+    },
+    {
+      "id": 1398,
+      "presupuesto_id": 9,
+      "tipo": "mano_obra",
+      "descripcion": "MANO DE OBRA RECAMBIO PARTES ",
+      "cantidad": null,
+      "precio_unitario": 450000,
+      "orden": 1
+    },
+    {
+      "id": 1902,
+      "presupuesto_id": 10,
+      "tipo": "repuesto",
+      "descripcion": "CUBRE OPTICA ",
+      "cantidad": 1,
+      "precio_unitario": 50000,
+      "orden": 0
+    },
+    {
+      "id": 1903,
+      "presupuesto_id": 10,
+      "tipo": "repuesto",
+      "descripcion": "OPTICA ",
+      "cantidad": 1,
+      "precio_unitario": 100000,
+      "orden": 1
+    },
+    {
+      "id": 1904,
+      "presupuesto_id": 10,
+      "tipo": "repuesto",
+      "descripcion": "PECHERA ",
+      "cantidad": 1,
+      "precio_unitario": 65000,
+      "orden": 2
+    },
+    {
+      "id": 1905,
+      "presupuesto_id": 10,
+      "tipo": "repuesto",
+      "descripcion": "CACHA LATERAL PECHERA LADO DERECHO ",
+      "cantidad": 1,
+      "precio_unitario": 22000,
+      "orden": 3
+    },
+    {
+      "id": 1906,
+      "presupuesto_id": 10,
+      "tipo": "repuesto",
+      "descripcion": "ARCO POSAPIE ",
+      "cantidad": 1,
+      "precio_unitario": 40000,
+      "orden": 4
+    },
+    {
+      "id": 1907,
+      "presupuesto_id": 10,
+      "tipo": "repuesto",
+      "descripcion": "MANIJA Y SOPORTE FRENO ",
+      "cantidad": 1,
+      "precio_unitario": 17000,
+      "orden": 5
+    },
+    {
+      "id": 1908,
+      "presupuesto_id": 10,
+      "tipo": "repuesto",
+      "descripcion": "PALANCA EMBRAGUE ",
+      "cantidad": 1,
+      "precio_unitario": 23000,
+      "orden": 6
+    },
+    {
+      "id": 1909,
+      "presupuesto_id": 10,
+      "tipo": "repuesto",
+      "descripcion": "PUNTERA LADO IZQUIERDO ",
+      "cantidad": 1,
+      "precio_unitario": 10000,
+      "orden": 7
+    },
+    {
+      "id": 1910,
+      "presupuesto_id": 10,
+      "tipo": "repuesto",
+      "descripcion": "BRAZO SEGURO SELECTORA ",
+      "cantidad": 1,
+      "precio_unitario": 20000,
+      "orden": 8
+    },
+    {
+      "id": 1911,
+      "presupuesto_id": 10,
+      "tipo": "mano_obra",
+      "descripcion": "ARREGLO CAJA",
+      "cantidad": null,
+      "precio_unitario": 200000,
+      "orden": 0
+    },
+    {
+      "id": 1912,
+      "presupuesto_id": 10,
+      "tipo": "mano_obra",
+      "descripcion": "RECAMBIO PARTES ",
+      "cantidad": null,
+      "precio_unitario": 400000,
+      "orden": 1
+    },
+    {
+      "id": 2679,
+      "presupuesto_id": 11,
+      "tipo": "repuesto",
+      "descripcion": "ESCAPE ",
+      "cantidad": 1,
+      "precio_unitario": 300000,
+      "orden": 0
+    },
+    {
+      "id": 2680,
+      "presupuesto_id": 11,
+      "tipo": "repuesto",
+      "descripcion": "BOMBA FRENO ",
+      "cantidad": 1,
+      "precio_unitario": 45000,
+      "orden": 1
+    },
+    {
+      "id": 2681,
+      "presupuesto_id": 11,
+      "tipo": "repuesto",
+      "descripcion": "ESPEJO LADO IZQUIERDO ",
+      "cantidad": 1,
+      "precio_unitario": 65000,
+      "orden": 2
+    },
+    {
+      "id": 2682,
+      "presupuesto_id": 11,
+      "tipo": "repuesto",
+      "descripcion": "PALANCA CAMBIOS ",
+      "cantidad": 1,
+      "precio_unitario": 50000,
+      "orden": 3
+    },
+    {
+      "id": 2683,
+      "presupuesto_id": 11,
+      "tipo": "repuesto",
+      "descripcion": "TANQUE COMBUSTIBLE",
+      "cantidad": 1,
+      "precio_unitario": 400000,
+      "orden": 4
+    },
+    {
+      "id": 2684,
+      "presupuesto_id": 11,
+      "tipo": "repuesto",
+      "descripcion": "MANUBRIO ",
+      "cantidad": 1,
+      "precio_unitario": 40000,
+      "orden": 5
+    },
+    {
+      "id": 2685,
+      "presupuesto_id": 11,
+      "tipo": "repuesto",
+      "descripcion": "PUNTERAS",
+      "cantidad": 1,
+      "precio_unitario": 19000,
+      "orden": 6
+    },
+    {
+      "id": 2686,
+      "presupuesto_id": 11,
+      "tipo": "repuesto",
+      "descripcion": "SOPORTE Y MANIJA DE EMBRAGUE ",
+      "cantidad": 1,
+      "precio_unitario": 45000,
+      "orden": 7
+    },
+    {
+      "id": 2687,
+      "presupuesto_id": 11,
+      "tipo": "repuesto",
+      "descripcion": "PEDALIN DELANTEERO LADO IZQUIERDO ",
+      "cantidad": 1,
+      "precio_unitario": 40000,
+      "orden": 8
+    },
+    {
+      "id": 2688,
+      "presupuesto_id": 11,
+      "tipo": "repuesto",
+      "descripcion": "PEDALIN TRASERO IZQUIERDO ",
+      "cantidad": 1,
+      "precio_unitario": 30000,
+      "orden": 9
+    },
+    {
+      "id": 2689,
+      "presupuesto_id": 11,
+      "tipo": "repuesto",
+      "descripcion": "CACHA TANQUE LADO IZQUIERDO ",
+      "cantidad": 1,
+      "precio_unitario": 100000,
+      "orden": 10
+    },
+    {
+      "id": 2690,
+      "presupuesto_id": 11,
+      "tipo": "repuesto",
+      "descripcion": "CACHA CUADRO IZQUIERDA ",
+      "cantidad": 1,
+      "precio_unitario": 70000,
+      "orden": 11
+    },
+    {
+      "id": 2691,
+      "presupuesto_id": 11,
+      "tipo": "repuesto",
+      "descripcion": "CACHA BAJO ASIENTO LATERAL IZQUIERDA ",
+      "cantidad": 1,
+      "precio_unitario": 115000,
+      "orden": 12
+    },
+    {
+      "id": 2692,
+      "presupuesto_id": 11,
+      "tipo": "repuesto",
+      "descripcion": "GIRO DELANTERO Y TRASERO LADO IZQUIERDO ",
+      "cantidad": 1,
+      "precio_unitario": 50000,
+      "orden": 13
+    },
+    {
+      "id": 2693,
+      "presupuesto_id": 11,
+      "tipo": "repuesto",
+      "descripcion": "PUÑOS",
+      "cantidad": 1,
+      "precio_unitario": 45000,
+      "orden": 14
+    },
+    {
+      "id": 2694,
+      "presupuesto_id": 11,
+      "tipo": "repuesto",
+      "descripcion": "AGARADERA MANOS LATERAL IZQUIERDO ",
+      "cantidad": 1,
+      "precio_unitario": 28000,
+      "orden": 15
+    },
+    {
+      "id": 2695,
+      "presupuesto_id": 11,
+      "tipo": "repuesto",
+      "descripcion": "OPTICA DELANTERA ",
+      "cantidad": 1,
+      "precio_unitario": 98000,
+      "orden": 16
+    },
+    {
+      "id": 2696,
+      "presupuesto_id": 11,
+      "tipo": "repuesto",
+      "descripcion": "CACHA CUBRE OPTICA IZQUIERDA ",
+      "cantidad": 1,
+      "precio_unitario": 56500,
+      "orden": 17
+    }
+  ]
+}
