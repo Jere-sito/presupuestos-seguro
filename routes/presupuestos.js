@@ -1,7 +1,7 @@
 // routes/presupuestos.js
 'use strict';
 const express = require('express');
-const { getDb } = require('../database');
+const { getDb, generateCodigoSerie } = require('../database');
 
 const router = express.Router();
 
@@ -42,7 +42,7 @@ router.get('/', (req, res) => {
   const { q, estado, compania_id } = req.query;
   const db = getDb();
   let sql = `
-    SELECT p.id, p.numero, p.fecha_emision, p.asegurado, p.patente,
+    SELECT p.id, p.numero, p.codigo_serie, p.fecha_emision, p.asegurado, p.patente,
            p.estado, p.creado_en, p.modificado_en,
            c.nombre as compania_nombre, u.nombre as creado_por_nombre,
            (SELECT COALESCE(SUM(CASE WHEN i.tipo='repuesto' THEN i.cantidad * i.precio_unitario ELSE i.precio_unitario END),0)
@@ -68,11 +68,11 @@ router.post('/', (req, res) => {
           modelo, tipo_moto, fecha_siniestro, compania_id, numero_siniestro, items } = req.body;
 
   const result = db.prepare(`
-    INSERT INTO presupuestos (numero, numero_secuencial, fecha_emision,
+    INSERT INTO presupuestos (numero, numero_secuencial, codigo_serie, fecha_emision,
       asegurado, domicilio_asegurado, marca, patente, modelo, tipo_moto,
       fecha_siniestro, compania_id, numero_siniestro, estado, creado_por)
-    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,'borrador',?)
-  `).run(numero, seq,
+    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,'borrador',?)
+  `).run(numero, seq, generateCodigoSerie(),
     fecha_emision || new Date().toISOString().split('T')[0],
     asegurado || null, domicilio_asegurado || null, marca || null,
     patente || null, modelo || null, tipo_moto || null,
@@ -141,11 +141,11 @@ router.post('/:id/duplicar', (req, res) => {
 
   const { seq, numero } = nextNumero(db);
   const result = db.prepare(`
-    INSERT INTO presupuestos (numero, numero_secuencial, fecha_emision,
+    INSERT INTO presupuestos (numero, numero_secuencial, codigo_serie, fecha_emision,
       asegurado, domicilio_asegurado, marca, patente, modelo, tipo_moto,
       fecha_siniestro, compania_id, numero_siniestro, estado, creado_por)
-    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,'borrador',?)
-  `).run(numero, seq, original.fecha_emision,
+    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,'borrador',?)
+  `).run(numero, seq, generateCodigoSerie(), original.fecha_emision,
     original.asegurado, original.domicilio_asegurado, original.marca,
     original.patente, original.modelo, original.tipo_moto,
     original.fecha_siniestro, original.compania_id, original.numero_siniestro,

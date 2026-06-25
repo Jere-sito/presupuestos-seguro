@@ -1,21 +1,5 @@
 [phases.setup]
-nixPkgs = [
-  "chromium",
-  "nss",
-  "nspr",
-  "atk",
-  "at-spi2-atk",
-  "cups",
-  "libXcomposite",
-  "libXdamage",
-  "libXext",
-  "libXfixes",
-  "libXrandr",
-  "mesa",
-  "libdrm",
-  "expat",
-  "alsa-lib"
-]
+nixPkgs = ["python3", "python3Packages.pip"]
 
 [phases.install]
-cmds = ["npm ci"]
+cmds = ["npm ci", "pip3 install fpdf2 Pillow"]

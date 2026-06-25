@@ -22,18 +22,14 @@
     </div>
 
     <!-- Formulario agregar -->
-    <form id="form-usuario" style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;margin-bottom:16px;align-items:end">
+    <form id="form-usuario" style="display:grid;grid-template-columns:1fr 1fr auto;gap:10px;margin-bottom:16px;align-items:end">
       <div class="field-group" style="margin:0">
-        <label>Nombre</label>
-        <input type="text" id="u-nombre" required>
-      </div>
-      <div class="field-group" style="margin:0">
-        <label>Email</label>
-        <input type="email" id="u-email" required>
+        <label>Nombre de usuario</label>
+        <input type="text" id="u-nombre" required autocomplete="off">
       </div>
       <div class="field-group" style="margin:0">
         <label>Contraseña</label>
-        <input type="password" id="u-password" required>
+        <input type="password" id="u-password" required autocomplete="new-password">
       </div>
       <button type="submit" class="btn btn-primary">Agregar</button>
     </form>
@@ -42,7 +38,7 @@
     <div class="table-wrap">
       <table class="data-table">
         <thead>
-          <tr><th>Nombre</th><th>Email</th><th>Creado</th><th>Acciones</th></tr>
+          <tr><th>Nombre</th><th>Creado</th><th>Acciones</th></tr>
         </thead>
         <tbody id="tbody-usuarios"></tbody>
       </table>
@@ -55,13 +51,12 @@
       document.getElementById('tbody-usuarios').innerHTML = lista.map(u => `
         <tr>
           <td><strong>${u.nombre}</strong></td>
-          <td class="text-muted">${u.email}</td>
           <td class="text-muted">${u.creado_en ? u.creado_en.split('T')[0] : ''}</td>
           <td>
             <button class="btn btn-sm btn-danger" onclick="eliminar(${u.id},'${u.nombre}')">Eliminar</button>
           </td>
         </tr>
-      `).join('') || '<tr><td colspan="4" style="text-align:center;padding:24px;color:var(--muted)">Sin usuarios</td></tr>';
+      `).join('') || '<tr><td colspan="3" style="text-align:center;padding:24px;color:var(--muted)">Sin usuarios</td></tr>';
     }
     async function eliminar(id, nombre) {
       if (!confirm(`¿Eliminar al usuario "${nombre}"?`)) return;
@@ -75,7 +70,6 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           nombre: document.getElementById('u-nombre').value,
-          email: document.getElementById('u-email').value,
           password: document.getElementById('u-password').value
         })
       });

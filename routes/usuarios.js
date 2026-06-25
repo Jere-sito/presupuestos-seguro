@@ -9,26 +9,27 @@ const router = express.Router();
 
 router.get('/', (req, res) => {
   const db = getDb();
-  const usuarios = db.prepare('SELECT id, nombre, email, creado_en FROM usuarios ORDER BY nombre').all();
+  const usuarios = db.prepare('SELECT id, nombre, creado_en FROM usuarios ORDER BY nombre').all();
   res.json(usuarios);
 });
 
 router.post('/', async (req, res) => {
-  const { nombre, email, password } = req.body;
-  if (!nombre || !email || !password) {
-    return res.status(400).json({ error: 'Nombre, email y contraseña requeridos' });
+  const { nombre, password } = req.body;
+  if (!nombre || !password) {
+    return res.status(400).json({ error: 'Nombre y contraseña requeridos' });
   }
   const db = getDb();
   try {
     const hash = await bcrypt.hash(password, BCRYPT_ROUNDS);
+    const internalEmail = nombre.trim().toLowerCase().replace(/\s+/g, '') + '@gyver.local';
     const result = db.prepare(
       'INSERT INTO usuarios (nombre, email, password_hash) VALUES (?, ?, ?)'
-    ).run(nombre.trim(), email.trim().toLowerCase(), hash);
-    const u = db.prepare('SELECT id, nombre, email, creado_en FROM usuarios WHERE id=?').get(result.lastInsertRowid);
+    ).run(nombre.trim(), internalEmail, hash);
+    const u = db.prepare('SELECT id, nombre, creado_en FROM usuarios WHERE id=?').get(result.lastInsertRowid);
     res.status(201).json(u);
   } catch (e) {
     if (e.message.includes('UNIQUE')) {
-      return res.status(409).json({ error: 'Ya existe un usuario con ese email' });
+      return res.status(409).json({ error: 'Ya existe un usuario con ese nombre' });
     }
     throw e;
   }

@@ -19,23 +19,46 @@ function fmt(n) {
 
 function parsePrecio(str) {
   if (!str) return 0;
-  return parseFloat(String(str).replace(/\./g, '').replace(',', '.')) || 0;
+  const s = String(str).trim();
+  if (!s) return 0;
+
+  const dotCount = (s.match(/\./g) || []).length;
+  const commaCount = (s.match(/,/g) || []).length;
+  let normalized;
+
+  if (dotCount > 0 && commaCount > 0) {
+    // Ambos separadores: el último es el decimal
+    if (s.lastIndexOf(',') > s.lastIndexOf('.')) {
+      normalized = s.replace(/\./g, '').replace(',', '.'); // 1.234,56 → 1234.56
+    } else {
+      normalized = s.replace(/,/g, '');                    // 1,234.56 → 1234.56
+    }
+  } else if (commaCount === 1 && dotCount === 0) {
+    normalized = s.replace(',', '.');                      // 55,50 → 55.50
+  } else if (dotCount === 1 && commaCount === 0) {
+    const afterDot = s.length - s.lastIndexOf('.') - 1;
+    normalized = afterDot <= 2 ? s : s.replace('.', '');   // 55.50→decimal, 1.500→miles
+  } else {
+    normalized = s.replace(/\./g, '');                     // múltiples puntos → miles
+  }
+  return parseFloat(normalized) || 0;
+}
+
+function formatPrecioInput(n) {
+  if (!n) return '';
+  return String(parseFloat(n)).replace('.', ',');           // 1500.5 → "1500,5"
 }
 
 // --- TOTALES ---
 function recalcularTotales() {
   const subtotalRep = repuestos.reduce((s, r) => s + (r.cantidad * r.precio_unitario), 0);
   const subtotalMO = manoObra.reduce((s, m) => s + m.precio_unitario, 0);
-  const neto = subtotalRep + subtotalMO;
-  const iva = neto * 0.21;
-  const total = neto + iva;
+  const total = subtotalRep + subtotalMO;
 
   document.getElementById('subtotal-rep').textContent = fmt(subtotalRep);
   document.getElementById('subtotal-mo').textContent = fmt(subtotalMO);
   document.getElementById('tot-rep').textContent = fmt(subtotalRep);
   document.getElementById('tot-mo').textContent = fmt(subtotalMO);
-  document.getElementById('tot-neto').textContent = fmt(neto);
-  document.getElementById('tot-iva').textContent = fmt(iva);
   document.getElementById('tot-total').textContent = fmt(total);
 }
 
@@ -52,7 +75,7 @@ function renderRepuestos() {
     tr.innerHTML = `
       <td><input type="number" value="${item.cantidad}" min="0.01" step="0.01" class="inp-cant" data-idx="${i}"></td>
       <td><input type="text" value="${item.descripcion}" class="inp-desc" data-idx="${i}"></td>
-      <td><input type="text" value="${item.precio_unitario}" class="inp-precio" data-idx="${i}"></td>
+      <td><input type="text" value="${formatPrecioInput(item.precio_unitario)}" class="inp-precio" data-idx="${i}" placeholder="0"></td>
       <td class="total-cell">${fmt(item.cantidad * item.precio_unitario)}</td>
       <td><button type="button" class="btn-remove" data-idx="${i}">×</button></td>
     `;
@@ -60,16 +83,20 @@ function renderRepuestos() {
   });
 
   tbody.querySelectorAll('.inp-cant').forEach(inp => inp.addEventListener('input', e => {
-    repuestos[+e.target.dataset.idx].cantidad = parseFloat(e.target.value) || 0;
-    renderRepuestos(); recalcularTotales(); debouncedSave();
+    const idx = +e.target.dataset.idx;
+    repuestos[idx].cantidad = parseFloat(e.target.value) || 0;
+    e.target.closest('tr').querySelector('.total-cell').textContent = fmt(repuestos[idx].cantidad * repuestos[idx].precio_unitario);
+    recalcularTotales(); debouncedSave();
   }));
   tbody.querySelectorAll('.inp-desc').forEach(inp => inp.addEventListener('input', e => {
     repuestos[+e.target.dataset.idx].descripcion = e.target.value;
     debouncedSave();
   }));
   tbody.querySelectorAll('.inp-precio').forEach(inp => inp.addEventListener('input', e => {
-    repuestos[+e.target.dataset.idx].precio_unitario = parsePrecio(e.target.value);
-    renderRepuestos(); recalcularTotales(); debouncedSave();
+    const idx = +e.target.dataset.idx;
+    repuestos[idx].precio_unitario = parsePrecio(e.target.value);
+    e.target.closest('tr').querySelector('.total-cell').textContent = fmt(repuestos[idx].cantidad * repuestos[idx].precio_unitario);
+    recalcularTotales(); debouncedSave();
   }));
   tbody.querySelectorAll('.btn-remove').forEach(btn => btn.addEventListener('click', e => {
     repuestos.splice(+e.target.dataset.idx, 1);
@@ -88,7 +115,7 @@ function renderManoObra() {
     tr.className = 'item-row';
     tr.innerHTML = `
       <td><input type="text" value="${item.descripcion}" class="inp-desc-mo" data-idx="${i}"></td>
-      <td><input type="text" value="${item.precio_unitario}" class="inp-precio-mo" data-idx="${i}"></td>
+      <td><input type="text" value="${formatPrecioInput(item.precio_unitario)}" class="inp-precio-mo" data-idx="${i}" placeholder="0"></td>
       <td><button type="button" class="btn-remove-mo" data-idx="${i}">×</button></td>
     `;
     tbody.insertBefore(tr, document.getElementById('mo-empty'));
@@ -100,7 +127,7 @@ function renderManoObra() {
   }));
   tbody.querySelectorAll('.inp-precio-mo').forEach(inp => inp.addEventListener('input', e => {
     manoObra[+e.target.dataset.idx].precio_unitario = parsePrecio(e.target.value);
-    renderManoObra(); recalcularTotales(); debouncedSave();
+    recalcularTotales(); debouncedSave();
   }));
   tbody.querySelectorAll('.btn-remove-mo').forEach(btn => btn.addEventListener('click', e => {
     manoObra.splice(+e.target.dataset.idx, 1);
@@ -129,9 +156,7 @@ function collectFormData() {
     patente: document.getElementById('patente').value.trim() || null,
     modelo: document.getElementById('modelo').value.trim() || null,
     tipo_moto: document.getElementById('tipo_moto').value.trim() || null,
-    fecha_siniestro: document.getElementById('fecha_siniestro').value || null,
     compania_id: document.getElementById('compania_id').value || null,
-    numero_siniestro: document.getElementById('numero_siniestro').value.trim() || null,
     items: [
       ...repuestos.map((r, i) => ({ ...r, orden: i })),
       ...manoObra.map((m, i) => ({ ...m, orden: i }))
@@ -148,8 +173,8 @@ function setStatus(msg, cls) {
 
 async function autosave() {
   setStatus('Guardando...', 'saving');
-  const data = collectFormData();
   try {
+    const data = collectFormData();
     let res;
     if (!presupuestoId) {
       res = await fetch('/api/presupuestos', {
@@ -160,8 +185,11 @@ async function autosave() {
       if (!res.ok) throw new Error(await res.text());
       const result = await res.json();
       presupuestoId = result.id;
+      document.getElementById('numero').value = result.numero;
+      document.getElementById('codigo_serie').value = result.codigo_serie || '';
       history.replaceState(null, '', `/editar/${presupuestoId}`);
       document.getElementById('btn-pdf').classList.remove('hidden');
+      document.getElementById('btn-whatsapp').classList.remove('hidden');
     } else {
       res = await fetch(`/api/presupuestos/${presupuestoId}`, {
         method: 'PATCH',
@@ -177,7 +205,7 @@ async function autosave() {
     const now = new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
     setStatus(`Guardado ${now}`);
   } catch (e) {
-    setStatus('Error al guardar — reintentando...', 'error');
+    setStatus('Error: ' + (e.message || e).toString().substring(0, 120), 'error');
     console.error(e);
   }
 }
@@ -255,6 +283,7 @@ async function cargarPresupuesto() {
 
   // Llenar campos
   document.getElementById('numero').value = p.numero || '';
+  document.getElementById('codigo_serie').value = p.codigo_serie || '';
   document.getElementById('fecha_emision').value = p.fecha_emision || '';
   document.getElementById('asegurado').value = p.asegurado || '';
   document.getElementById('domicilio_asegurado').value = p.domicilio_asegurado || '';
@@ -262,9 +291,6 @@ async function cargarPresupuesto() {
   document.getElementById('patente').value = p.patente || '';
   document.getElementById('modelo').value = p.modelo || '';
   document.getElementById('tipo_moto').value = p.tipo_moto || '';
-  document.getElementById('fecha_siniestro').value = p.fecha_siniestro || '';
-  document.getElementById('numero_siniestro').value = p.numero_siniestro || '';
-
   await cargarCompanias(p.compania_id);
 
   // Cargar ítems
@@ -274,8 +300,9 @@ async function cargarPresupuesto() {
   renderManoObra();
   recalcularTotales();
 
-  // Mostrar botón PDF
+  // Mostrar botones PDF y WhatsApp
   document.getElementById('btn-pdf').classList.remove('hidden');
+  document.getElementById('btn-whatsapp').classList.remove('hidden');
 
   // Proteger si no es borrador
   if (ESTADOS_PROTEGIDOS.includes(estadoActual)) {
@@ -289,13 +316,62 @@ async function cargarPresupuesto() {
 }
 
 // PDF
-document.getElementById('btn-pdf').addEventListener('click', () => {
-  if (presupuestoId) window.location.href = `/pdf/${presupuestoId}`;
+document.getElementById('btn-pdf').addEventListener('click', async () => {
+  if (!presupuestoId) return;
+  clearTimeout(saveTimer);
+  saveTimer = null;
+  await autosave();
+  window.open(`/pdf/${presupuestoId}`, '_blank');
+});
+
+// WhatsApp: guarda, descarga PDF y abre chat
+document.getElementById('btn-whatsapp').addEventListener('click', async () => {
+  if (!presupuestoId) return;
+  clearTimeout(saveTimer);
+  saveTimer = null;
+  await autosave();
+  const a = document.createElement('a');
+  a.href = `/pdf/${presupuestoId}`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  window.open('https://wa.me/541123909375', '_blank', 'noopener');
 });
 
 // Confirmación al salir con cambios no guardados
 window.addEventListener('beforeunload', e => {
   if (saveTimer) { e.preventDefault(); e.returnValue = ''; }
+});
+
+// --- COMPAÑÍA INLINE ---
+document.getElementById('btn-nueva-compania').addEventListener('click', () => {
+  const f = document.getElementById('form-nueva-compania');
+  f.style.display = 'flex';
+  document.getElementById('nueva-compania-nombre').focus();
+});
+
+document.getElementById('btn-cancelar-compania').addEventListener('click', () => {
+  document.getElementById('form-nueva-compania').style.display = 'none';
+  document.getElementById('nueva-compania-nombre').value = '';
+});
+
+document.getElementById('btn-crear-compania').addEventListener('click', async () => {
+  const nombre = document.getElementById('nueva-compania-nombre').value.trim();
+  if (!nombre) return;
+  const res = await fetch('/api/companias', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ nombre })
+  });
+  const data = await res.json();
+  if (!res.ok) { alert(data.error || 'Error al crear compañía'); return; }
+  // Recargar el select y preseleccionar la nueva
+  const sel = document.getElementById('compania_id');
+  while (sel.options.length > 1) sel.remove(1);
+  await cargarCompanias(data.id);
+  document.getElementById('form-nueva-compania').style.display = 'none';
+  document.getElementById('nueva-compania-nombre').value = '';
+  debouncedSave();
 });
 
 // Init

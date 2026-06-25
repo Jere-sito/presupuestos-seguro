@@ -17,20 +17,20 @@ router.get('/login', (req, res) => {
 });
 
 router.post('/auth/login', async (req, res) => {
-  const { email, password } = req.body;
-  if (!email || !password) {
-    return res.status(400).json({ error: 'Email y contraseña requeridos' });
+  const { username, password } = req.body;
+  if (!username || !password) {
+    return res.status(400).json({ error: 'Usuario y contraseña requeridos' });
   }
   const db = getDb();
-  const user = db.prepare('SELECT * FROM usuarios WHERE email = ?').get(email);
-  // Siempre ejecutar bcrypt.compare para evitar timing oracle
+  const user = db.prepare('SELECT * FROM usuarios WHERE LOWER(nombre) = LOWER(?)').get(username.trim());
+  // Siempre ejecutar bcrypt.compare para evitar timing oracle en enumeración de usuarios
   const hashToCompare = user ? user.password_hash : DUMMY_HASH;
   const valid = await bcrypt.compare(password, hashToCompare);
   if (!user || !valid) {
-    return res.status(401).json({ error: 'Credenciales incorrectas' });
+    return res.status(401).json({ error: 'Usuario o contraseña incorrectos' });
   }
   const token = jwt.sign(
-    { id: user.id, nombre: user.nombre, email: user.email },
+    { id: user.id, nombre: user.nombre },
     JWT_SECRET,
     { expiresIn: '30d' }
   );

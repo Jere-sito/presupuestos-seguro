@@ -21,6 +21,12 @@ function getDb() {
   return db;
 }
 
+function generateCodigoSerie() {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  const group = () => Array.from({ length: 4 }, () => chars[Math.floor(Math.random() * chars.length)]).join('');
+  return `${group()}-${group()}-${group()}-${group()}`;
+}
+
 function initSchema() {
   db.exec(`
     CREATE TABLE IF NOT EXISTS usuarios (
@@ -68,10 +74,22 @@ function initSchema() {
       orden INTEGER NOT NULL DEFAULT 0
     );
   `);
+
+  // Migración: agregar columna codigo_serie si no existe
+  try {
+    db.exec('ALTER TABLE presupuestos ADD COLUMN codigo_serie TEXT');
+  } catch (e) {
+    // Ya existe, ignorar
+  }
+
+  // Generar código para presupuestos existentes que no tengan uno
+  const sinCodigo = db.prepare('SELECT id FROM presupuestos WHERE codigo_serie IS NULL').all();
+  const updateSerie = db.prepare('UPDATE presupuestos SET codigo_serie = ? WHERE id = ?');
+  sinCodigo.forEach(row => updateSerie.run(generateCodigoSerie(), row.id));
 }
 
 function resetDb() {
   if (db) { db.close(); db = null; }
 }
 
-module.exports = { getDb, resetDb };
+module.exports = { getDb, resetDb, generateCodigoSerie };

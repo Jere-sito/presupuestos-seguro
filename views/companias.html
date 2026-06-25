@@ -42,21 +42,50 @@
       const res = await fetch('/api/companias?todas=1');
       const lista = await res.json();
       document.getElementById('tbody-companias').innerHTML = lista.map(c => `
-        <tr>
-          <td><strong>${c.nombre}</strong></td>
+        <tr id="fila-${c.id}">
+          <td id="nombre-${c.id}"><strong>${c.nombre}</strong></td>
           <td><span class="badge ${c.activa ? 'badge-aprobado' : 'badge-rechazado'}">${c.activa ? 'Activa' : 'Inactiva'}</span></td>
           <td>
-            <button class="btn btn-sm btn-secondary" onclick="toggle(${c.id})">
-              ${c.activa ? 'Desactivar' : 'Activar'}
-            </button>
+            <div class="flex gap-2">
+              <button class="btn btn-sm btn-secondary" onclick="editar(${c.id}, this)">Editar</button>
+              <button class="btn btn-sm btn-secondary" onclick="toggle(${c.id})">${c.activa ? 'Desactivar' : 'Activar'}</button>
+            </div>
           </td>
         </tr>
       `).join('') || '<tr><td colspan="3" style="text-align:center;padding:24px;color:var(--muted)">Sin compañías</td></tr>';
     }
+
+    function editar(id, btn) {
+      const cell = document.getElementById(`nombre-${id}`);
+      const nombreActual = cell.querySelector('strong').textContent;
+      cell.innerHTML = `<input type="text" id="edit-${id}" value="${nombreActual.replace(/"/g,'&quot;')}" style="width:100%;max-width:280px">`;
+      document.getElementById(`edit-${id}`).focus();
+      const acciones = btn.closest('div');
+      acciones.innerHTML = `
+        <button class="btn btn-sm btn-primary" onclick="guardar(${id})">Guardar</button>
+        <button class="btn btn-sm btn-secondary" onclick="cargar()">Cancelar</button>
+      `;
+      document.getElementById(`edit-${id}`).addEventListener('keydown', e => {
+        if (e.key === 'Enter') guardar(id);
+        if (e.key === 'Escape') cargar();
+      });
+    }
+
+    async function guardar(id) {
+      const nombre = document.getElementById(`edit-${id}`).value.trim();
+      if (!nombre) return;
+      const res = await fetch(`/api/companias/${id}`, {
+        method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ nombre })
+      });
+      if (res.ok) { cargar(); }
+      else { const d = await res.json(); alert(d.error || 'Error al guardar'); }
+    }
+
     async function toggle(id) {
       await fetch(`/api/companias/${id}/toggle`, { method: 'PATCH' });
       cargar();
     }
+
     document.getElementById('form-compania').addEventListener('submit', async e => {
       e.preventDefault();
       const nombre = document.getElementById('nueva-compania').value.trim();
