@@ -37,6 +37,12 @@
       <select id="filtro-compania" style="width:auto">
         <option value="">Todas las compañías</option>
       </select>
+      <label style="display:flex;align-items:center;gap:6px;font-size:14px;color:var(--muted)">
+        Desde <input type="date" id="filtro-desde" style="width:auto">
+      </label>
+      <label style="display:flex;align-items:center;gap:6px;font-size:14px;color:var(--muted)">
+        Hasta <input type="date" id="filtro-hasta" style="width:auto">
+      </label>
     </div>
 
     <div class="table-wrap">
@@ -50,12 +56,13 @@
             <th>Compañía</th>
             <th class="tr">Total</th>
             <th>Estado</th>
+            <th>Fecha</th>
             <th>Creado por</th>
             <th>Acciones</th>
           </tr>
         </thead>
         <tbody id="tabla-body">
-          <tr><td colspan="9" style="text-align:center;padding:32px;color:var(--muted)">Cargando...</td></tr>
+          <tr><td colspan="10" style="text-align:center;padding:32px;color:var(--muted)">Cargando...</td></tr>
         </tbody>
       </table>
     </div>

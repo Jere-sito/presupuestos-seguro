@@ -21,14 +21,24 @@ async function cargarCompanias() {
   });
 }
 
+function fmtFecha(s) {
+  if (!s) return '—';
+  const d = s.split(' ')[0].split('-');
+  return d.length === 3 ? `${d[2]}/${d[1]}/${d[0]}` : s;
+}
+
 async function cargarLista() {
   const q = document.getElementById('q').value.trim();
   const estado = document.getElementById('filtro-estado').value;
   const compania_id = document.getElementById('filtro-compania').value;
+  const desde = document.getElementById('filtro-desde').value;
+  const hasta = document.getElementById('filtro-hasta').value;
   const params = new URLSearchParams();
   if (q) params.set('q', q);
   if (estado) params.set('estado', estado);
   if (compania_id) params.set('compania_id', compania_id);
+  if (desde) params.set('fecha_desde', desde);
+  if (hasta) params.set('fecha_hasta', hasta);
 
   const res = await fetch('/api/presupuestos?' + params);
   const data = await res.json();
@@ -48,6 +58,7 @@ async function cargarLista() {
       <td>${p.compania_nombre || '<span class="text-muted">—</span>'}</td>
       <td class="tr"><strong>${fmt(p.total)}</strong></td>
       <td><span class="badge ${ESTADOS[p.estado]}">${p.estado}</span></td>
+      <td class="text-muted">${fmtFecha(p.creado_en)}</td>
       <td class="text-muted">${p.creado_por_nombre || '—'}</td>
       <td>
         <div class="flex gap-2">
@@ -122,6 +133,8 @@ document.getElementById('q').addEventListener('input', () => {
 });
 document.getElementById('filtro-estado').addEventListener('change', cargarLista);
 document.getElementById('filtro-compania').addEventListener('change', cargarLista);
+document.getElementById('filtro-desde').addEventListener('change', cargarLista);
+document.getElementById('filtro-hasta').addEventListener('change', cargarLista);
 
 // Init
 cargarCompanias();

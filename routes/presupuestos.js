@@ -39,7 +39,7 @@ function getPresupuesto(db, id) {
 
 // GET /api/presupuestos?q=&estado=&compania_id=
 router.get('/', (req, res) => {
-  const { q, estado, compania_id } = req.query;
+  const { q, estado, compania_id, fecha_desde, fecha_hasta } = req.query;
   const db = getDb();
   let sql = `
     SELECT p.id, p.numero, p.codigo_serie, p.fecha_emision, p.asegurado, p.patente,
@@ -56,6 +56,8 @@ router.get('/', (req, res) => {
   if (q) { sql += ' AND (p.asegurado LIKE ? OR p.patente LIKE ?)'; params.push(`%${q}%`, `%${q}%`); }
   if (estado) { sql += ' AND p.estado = ?'; params.push(estado); }
   if (compania_id) { sql += ' AND p.compania_id = ?'; params.push(compania_id); }
+  if (fecha_desde) { sql += ' AND date(p.creado_en) >= ?'; params.push(fecha_desde); }
+  if (fecha_hasta) { sql += ' AND date(p.creado_en) <= ?'; params.push(fecha_hasta); }
   sql += ' ORDER BY p.creado_en DESC';
   res.json(db.prepare(sql).all(...params));
 });
