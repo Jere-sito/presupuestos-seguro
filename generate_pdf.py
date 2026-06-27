@@ -42,9 +42,13 @@ logo_path  = data.get("logoPath", "")
 
 # ─── Fuentes ──────────────────────────────────────────────────────────────────
 
-FONTS_DIR = r"C:\Windows\Fonts"
-ARIAL     = os.path.join(FONTS_DIR, "arial.ttf")
-ARIAL_B   = os.path.join(FONTS_DIR, "arialbd.ttf")
+if sys.platform == "win32":
+    ARIAL   = r"C:\Windows\Fonts\arial.ttf"
+    ARIAL_B = r"C:\Windows\Fonts\arialbd.ttf"
+else:
+    # Linux (Railway): Liberation Sans = equivalente open-source de Arial
+    ARIAL   = "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf"
+    ARIAL_B = "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf"
 
 # ─── PDF ──────────────────────────────────────────────────────────────────────
 
